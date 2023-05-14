@@ -11,7 +11,6 @@ from server.core.config import MYSQL_DB_URL
 def session_scope():
     engine = create_engine(
         MYSQL_DB_URL,
-        encoding="utf-8",
         pool_recycle=3600,
         pool_size=20,
         max_overflow=20,
