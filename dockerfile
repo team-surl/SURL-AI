@@ -1,5 +1,5 @@
 # 도커 베이스 이미지 선택
-FROM python:3.10
+FROM python:3.10-alpine
 
 # 필요한 파일들을 컨테이너 내부로 복사
 COPY requirements.txt requirements.txt
