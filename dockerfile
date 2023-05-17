@@ -1,18 +1,13 @@
-# Base image
+# 도커 베이스 이미지 선택
 FROM python:3.10
 
-# Set the working directory
-WORKDIR /app
+# 필요한 파일들을 컨테이너 내부로 복사
+COPY requirements.txt requirements.txt
+COPY server server
+COPY main.py main.py
 
-# Copy the main.py file
-COPY server/main.py
-
-# Install dependencies
-COPY requirements.txt
+# 필요한 패키지 설치
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Expose the necessary port(s)
-EXPOSE 8000
-
-# Run the application
+# 컨테이너 실행시 실행할 명령어
 CMD ["python", "main.py"]
