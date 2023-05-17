@@ -27,30 +27,27 @@ def day(surl: str, session: Session):
 
 def week(surl: str, session: Session):
     today = datetime.now().date()
-    seven_weeks_ago = today - timedelta(weeks=7)
+    seven_weeks_ago = today - timedelta(weeks=8)
 
-    visitors_by_week = {seven_weeks_ago + timedelta(weeks=x): 0 for x in range(8)}
+    visitors_by_week = {}
 
-    visits = (
-        session.query(
-            func.DATE_FORMAT(Visitor.created_at, '%Y-%m-%d'),
-            func.count(Visitor.id)
-        )
-        .join(URL)
-        .filter(
-            URL.short_url == surl,
-            Visitor.created_at >= seven_weeks_ago
-        )
-        .group_by(
-            func.DATE_FORMAT(Visitor.created_at, '%Y-%m-%d')
-        )
-        .all()
-    )
+    for i in range(8):
+        week_start = seven_weeks_ago + timedelta(weeks=i)
+        week_end = week_start + timedelta(weeks=1) - timedelta(days=1)
+        visitors_by_week[week_start] = 0
 
-    for visit in visits:
-        week_start_date = datetime.strptime(visit[0], '%Y-%m-%d').date()
-        visitor_count = visit[1]
-        visitors_by_week[week_start_date] = visitor_count
+        visit_count = (
+            session.query(func.count(Visitor.id))
+            .join(URL)
+            .filter(
+                URL.short_url == surl,
+                Visitor.created_at >= week_start,
+                Visitor.created_at <= week_end
+            )
+            .scalar()
+        )
+
+        visitors_by_week[week_start] = visit_count
 
     return visitors_by_week
 
