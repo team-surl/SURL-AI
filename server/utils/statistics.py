@@ -67,3 +67,21 @@ def world(surl: str, session: Session):
         stats[country] += 1
 
     return dict(stats)
+
+def main(session: Session):
+    today = datetime.now().date()
+    one_week_ago = today - timedelta(days=7)
+
+    visitors_by_date = {one_week_ago + timedelta(days=x): 0 for x in range(8)}
+
+    visits = (
+        session.query(func.date(Visitor.created_at), func.count(Visitor.id))
+        .join(URL)
+        .filter(Visitor.created_at >= one_week_ago)
+        .group_by(func.date(Visitor.created_at))
+        .all()
+    )
+
+    visitors_by_date.update(visits)
+
+    return visitors_by_date
