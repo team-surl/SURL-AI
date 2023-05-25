@@ -27,7 +27,7 @@ def day(surl: str, session: Session):
 
 def week(surl: str, session: Session):
     today = datetime.now().date()
-    seven_weeks_ago = today - timedelta(weeks=8)
+    seven_weeks_ago = today - timedelta(weeks=8) + timedelta(days=1)
 
     visitors_by_week = {}
 
