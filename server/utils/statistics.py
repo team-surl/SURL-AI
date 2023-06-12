@@ -68,6 +68,7 @@ def world(surl: str, session: Session):
 
     return dict(stats)
 
+
 def main(session: Session):
     today = datetime.now().date()
     one_week_ago = today - timedelta(days=7)
